@@ -10,7 +10,7 @@ import authValidation from '../validations/auth.validation';
 
 class User {
   public async addUser(req: Request, res: Response) {
-    const { firstName, lastName, email, password, genre, role } = req.body;
+    const { firstName, lastName, email, password, genre } = req.body;
 
     userValidation.email = email;
     userValidation.firstName = firstName;
@@ -23,7 +23,7 @@ class User {
       if (errors.length > 0) {
         return res.status(400).json({
           status: 'error',
-          message: 'verifique los datos de registro',
+          message: 'verifique los datos de registro'
         });
       }
 
@@ -32,7 +32,7 @@ class User {
       if (user) {
         return res.status(400).json({
           status: 'error',
-          message: 'Usuario ya se encuentra en uso',
+          message: 'Usuario ya se encuentra en uso'
         });
       }
       // agregar user
@@ -41,8 +41,7 @@ class User {
         lastName,
         email,
         password,
-        role,
-        genre,
+        genre
       });
 
       //encriptar contraseña
@@ -60,7 +59,7 @@ class User {
     } catch (error) {
       return res.status(400).json({
         status: 'error',
-        message: error,
+        message: error
       });
     }
   }
@@ -70,7 +69,7 @@ class User {
     if (!user) {
       return res.status(400).json({
         status: 'error',
-        message: 'usuario no encontrado',
+        message: 'usuario no encontrado'
       });
     }
     return res.status(200).send(user);
@@ -84,14 +83,14 @@ class User {
       if (!user) {
         return res.status(401).json({
           status: 'error',
-          message: 'No se encontro el usuario',
+          message: 'No se encontro el usuario'
         });
       }
       return res.status(200).send(user);
     } catch (error) {
       return res.status(400).json({
         status: 'error',
-        message: 'Error en los datos ',
+        message: 'Error en los datos '
       });
     }
   }
@@ -107,7 +106,7 @@ class User {
     if (errors.length > 0) {
       return res.status(400).json({
         status: 'error',
-        message: 'Verifique los datos de inicio de sesión',
+        message: 'Verifique los datos de inicio de sesión'
       });
     }
 
@@ -117,7 +116,7 @@ class User {
       if (!user) {
         return res.status(400).json({
           status: 'error',
-          message: 'usuario o contraseña incorrecta',
+          message: 'usuario o contraseña incorrecta'
         });
       }
 
@@ -127,7 +126,7 @@ class User {
       if (!isMatch) {
         return res.status(400).json({
           status: 'error',
-          message: 'Usuario o contraseña incorrecta',
+          message: 'Usuario o contraseña incorrecta'
         });
       }
 
