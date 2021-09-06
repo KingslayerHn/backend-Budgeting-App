@@ -78,7 +78,7 @@ class User {
   public async getUserById(req: requestWithUser, res: Response) {
     const { id } = req.params;
     try {
-      // revisar si existe el doctor
+      // check if user exist
       const user = await userModel.findById(id).select('-password');
       if (!user) {
         return res.status(401).json({
@@ -90,7 +90,7 @@ class User {
     } catch (error) {
       return res.status(400).json({
         status: 'error',
-        message: 'Error en los datos '
+        message: 'Error en los datos'
       });
     }
   }
