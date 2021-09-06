@@ -1,0 +1,45 @@
+{
+  "name": "BS-Backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "clean": "rimraf build",
+    "build": "tsc && npm run public",
+    "public": "cp -r ./src/public ./build",
+    "dev": "ts-node-dev --respawn src/index.ts",
+    "start": "node ./build/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KingslayerHn/BS-Backend.git"
+  },
+  "keywords": [],
+  "author": "Lester Arteaga",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KingslayerHn/BS-Backend/issues"
+  },
+  "homepage": "https://github.com/KingslayerHn/BS-Backend#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "class-validator": "^0.13.1",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.12.3",
+    "morgan": "^1.10.0",
+    "ts-node-dev": "^1.1.6"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.10",
+    "@types/express": "^4.17.11",
+    "@types/jsonwebtoken": "^8.5.1",
+    "@types/mongoose": "^5.10.4",
+    "@types/morgan": "^1.9.2",
+    "@types/node": "^14.14.37",
+    "nodemon": "^2.0.7",
+    "typescript": "^4.2.3"
+  }
+}

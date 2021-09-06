@@ -1,0 +1,16 @@
+{
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescript]": {
+        "editor.formatOnPaste": true,
+        "editor.formatOnSave": true
+    },
+    "[markdown]": {
+        "editor.wordWrap": "on",
+        "editor.formatOnSave": true,
+        "editor.renderWhitespace": "all",
+        "editor.acceptSuggestionOnEnter": "off"
+    }
+}
