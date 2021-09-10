@@ -21,7 +21,7 @@ export const UserSchema = new Schema({
 
   genre: {
     type: String,
-    enum: ['male', 'female'],
+    enum: ['male', 'female', 'other'],
     required: true
   },
 
