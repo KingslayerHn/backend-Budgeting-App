@@ -23,7 +23,7 @@ class User {
       if (errors.length > 0) {
         return res.status(400).json({
           status: 'error',
-          message: 'verifique los datos de registro'
+          message: 'Check all fields!!'
         });
       }
 
@@ -32,7 +32,7 @@ class User {
       if (user) {
         return res.status(400).json({
           status: 'error',
-          message: 'Usuario ya se encuentra en uso'
+          message: 'Email already use!'
         });
       }
       // agregar user
@@ -59,7 +59,8 @@ class User {
     } catch (error) {
       return res.status(400).json({
         status: 'error',
-        message: error
+        message: 'Server error!',
+        error: error
       });
     }
   }
@@ -69,7 +70,7 @@ class User {
     if (!user) {
       return res.status(400).json({
         status: 'error',
-        message: 'usuario no encontrado'
+        message: 'User not found!'
       });
     }
     return res.status(200).send(user);
@@ -83,14 +84,14 @@ class User {
       if (!user) {
         return res.status(401).json({
           status: 'error',
-          message: 'No se encontro el usuario'
+          message: 'Usuario not found!'
         });
       }
       return res.status(200).send(user);
     } catch (error) {
       return res.status(400).json({
         status: 'error',
-        message: 'Error en los datos'
+        message: 'server error!'
       });
     }
   }
@@ -106,7 +107,7 @@ class User {
     if (errors.length > 0) {
       return res.status(400).json({
         status: 'error',
-        message: 'Verifique los datos de inicio de sesión'
+        message: 'User or password incorrect!'
       });
     }
 
@@ -116,7 +117,7 @@ class User {
       if (!user) {
         return res.status(400).json({
           status: 'error',
-          message: 'usuario o contraseña incorrecta'
+          message: 'User or password incorrect!'
         });
       }
 
@@ -126,7 +127,7 @@ class User {
       if (!isMatch) {
         return res.status(400).json({
           status: 'error',
-          message: 'Usuario o contraseña incorrecta'
+          message: 'User or password incorrect!'
         });
       }
 
@@ -134,7 +135,6 @@ class User {
       const payload = { user };
       jwt.sign(payload, keys.JWT, { expiresIn: 360000 }, (err, token) => {
         if (err) {
-          console.log('Error al fabricar el token');
           throw err;
         }
         return res.status(200).json({ token });

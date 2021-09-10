@@ -8,6 +8,7 @@ import keys from './config/keys';
 
 // routes
 import userRoutes from './routes/user.route';
+import accountRoutes from './routes/accounts.route';
 
 dotenv.config();
 
@@ -37,6 +38,7 @@ class Server {
 
     // user routes
     app.use('/api/users/', userRoutes);
+    app.use('/api/accounts/', accountRoutes);
 
     app.get('*', (req, res) => {
       res.sendFile(path.join(__dirname, 'public/index.html'));
