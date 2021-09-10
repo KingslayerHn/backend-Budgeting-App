@@ -5,9 +5,9 @@ import accountValidation from '../validations/account.validation';
 import accountModel from '../models/accounts.model';
 import { validate } from 'class-validator';
 
-class Amount {
+class Account {
   public async addAccount(req: requestWithUser, res: Response) {
-    const { user, description, amount } = req.body;
+    const { description, amount } = req.body;
 
     try {
       // validate fields
@@ -23,7 +23,7 @@ class Amount {
       }
 
       // found if user exist
-      const userData = await userModel.findById(user);
+      const userData = await userModel.findById(req.user._id);
       if (!userData) {
         return res.status(400).json({
           status: 'error',
@@ -33,7 +33,7 @@ class Amount {
 
       // create amount
       const account = new accountModel({
-        user,
+        user: userData._id,
         description,
         amount
       });
@@ -89,4 +89,4 @@ class Amount {
   }
 }
 
-export default new Amount();
+export default new Account();
