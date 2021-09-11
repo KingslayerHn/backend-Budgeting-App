@@ -87,6 +87,31 @@ class Account {
       });
     }
   }
+
+  public async debit(req: requestWithUser, res: Response) {
+    try {
+      const { id } = req.params;
+      const { amount } = req.body;
+
+      // get all accounts of user
+      const account = await accountModel.findOneAndUpdate(
+        { _id: id },
+        {
+          $set: {
+            amount: amount
+          }
+        },
+        { new: true }
+      );
+      return res.status(200).send(account);
+    } catch (error) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'Server error!',
+        error: error
+      });
+    }
+  }
 }
 
 export default new Account();
