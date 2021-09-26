@@ -94,20 +94,6 @@ class Expenses {
       });
     }
   }
-  // public async removeAccount(req: requestWithUser, res: Response) {
-  //   try {
-  //     const { id } = req.params;
-  //     // get all accounts of user
-  //     const account = await accountModel.findOneAndRemove({ _id: id });
-  //     return res.status(200).send(account);
-  //   } catch (error) {
-  //     return res.status(400).json({
-  //       status: 'error',
-  //       message: 'Server error!',
-  //       error: error
-  //     });
-  //   }
-  // }
 }
 
 export default new Expenses();
