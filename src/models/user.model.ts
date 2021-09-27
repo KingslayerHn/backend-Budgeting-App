@@ -25,6 +25,14 @@ export const UserSchema = new Schema({
     required: true
   },
 
+  profession: {
+    type: String
+  },
+
+  bio: {
+    type: String
+  },
+
   password: {
     type: String,
     require: true

@@ -143,6 +143,35 @@ class User {
       console.log(err);
     }
   }
+
+  public async updateUser(req: requestWithUser, res: Response) {
+    const { firstName, lastName, email, bio, profession, genre } = req.body;
+    const user = await userModel.findById(req.user.id);
+
+    try {
+      if (!user) {
+        return res.status(400).json({
+          status: 'error',
+          message: 'User not found!'
+        });
+      }
+      // update the properties
+      if (firstName) user.firstName = firstName;
+      if (lastName) user.lastName = lastName;
+      if (bio) user.bio = bio;
+      if (profession) user.profession = profession;
+      if (email) user.email = email;
+      if (genre) user.genre = genre;
+
+      await user.save();
+      return res.status(200).send(user);
+    } catch (error) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'server error!'
+      });
+    }
+  }
 }
 
 export default new User();
