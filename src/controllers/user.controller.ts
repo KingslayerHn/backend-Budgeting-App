@@ -172,6 +172,40 @@ class User {
       });
     }
   }
+
+  public async updatePassword(req: requestWithUser, res: Response) {
+    const user = await userModel.findById(req.user.id);
+    const { password, newPass } = req.body;
+
+    try {
+      if (!user) {
+        return res.status(400).json({
+          status: 'error',
+          message: 'User not found!'
+        });
+      }
+      // found if the password match
+      const isMatch = await bcrypt.compare(password, user.password);
+
+      if (!isMatch) {
+        return res.status(400).json({
+          status: 'error',
+          message: 'the password dont match with the actual password'
+        });
+      }
+
+      // crypt new password
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(newPass, salt);
+      await user.save();
+      return res.status(200).send(user);
+    } catch (error) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'server error!'
+      });
+    }
+  }
 }
 
 export default new User();
