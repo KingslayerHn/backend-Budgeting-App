@@ -88,6 +88,26 @@ class Account {
     }
   }
 
+  public async updateAccount(req: requestWithUser, res: Response) {
+    try {
+      const { id } = req.params;
+      const { description } = req.body;
+      let account = await accountModel.findOne({ _id: id });
+
+      if (!account) return res.status(400).json({ status: 'error', message: 'dont exist the account!' });
+
+      if (description) account.description = description;
+      await account.save();
+      return res.status(200).send(account);
+    } catch (error) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'Server error!',
+        error: error
+      });
+    }
+  }
+
   public async debit(req: requestWithUser, res: Response) {
     try {
       const { id } = req.params;

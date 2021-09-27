@@ -8,6 +8,7 @@ router
   .post('/', auth, accountController.addAccount)
   .get('/', auth, accountController.getAllUserAccounts)
   .delete('/:id', auth, accountController.removeAccount)
-  .put('/:id', auth, accountController.debit);
+  .put('/:id', auth, accountController.debit)
+  .put('/update/:id', auth, accountController.updateAccount);
 
 export default router;
