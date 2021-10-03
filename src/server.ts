@@ -12,6 +12,7 @@ import accountRoutes from './routes/accounts.route';
 import expenseRoutes from './routes/expenses.route';
 import incomeRoutes from './routes/income.route';
 import transferencesRoutes from './routes/transferences.route';
+import avatarRoutes from './routes/profile.image.route';
 
 dotenv.config();
 
@@ -45,6 +46,9 @@ class Server {
     app.use('/api/expenses/', expenseRoutes);
     app.use('/api/incomes/', incomeRoutes);
     app.use('/api/transferences/', transferencesRoutes);
+
+    // imagen profile routes
+    app.use('/api/image/profile/', avatarRoutes);
 
     app.get('*', (req, res) => {
       res.sendFile(path.join(__dirname, 'public/index.html'));
