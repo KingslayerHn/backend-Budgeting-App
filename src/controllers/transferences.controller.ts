@@ -5,6 +5,7 @@ import transferenceValidation from '../validations/transferenceValidation';
 import transferencesModel from '../models/transferences.model';
 import accountModel from '../models/accounts.model';
 import { validate } from 'class-validator';
+import moment from 'moment';
 
 class Expenses {
   public async addTransference(req: requestWithUser, res: Response) {
@@ -57,7 +58,11 @@ class Expenses {
         idSenderAccount: senderAccount._id,
         idRecivedAccount: recivedAccount._id,
         description,
-        senderAmount
+        senderAmount,
+        day: moment().date(),
+        month: moment().month(),
+        hour: moment().hour(),
+        minutes: moment().minutes()
       });
       await transference.save();
       return res.status(200).send(transference);

@@ -10,18 +10,31 @@ export const IncomeSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'accounts'
   },
-
   description: {
     type: String,
     required: true
   },
-
   amount: {
     type: Number,
     require: true,
     default: 0
   },
+  day: {
+    type: Number
+  },
 
+  month: {
+    type: Number
+  },
+  year: {
+    type: Number
+  },
+  hour: {
+    type: Number
+  },
+  minutes: {
+    type: Number
+  },
   createAt: {
     type: Date,
     default: Date.now

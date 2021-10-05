@@ -4,5 +4,9 @@ export default interface ExpensesInterface extends Document {
   account: Schema.Types.ObjectId;
   description: String;
   amount: Number;
+  day: Number;
+  month: Number;
+  hour: Number;
+  minutes: Number;
   createAt: Date;
 }

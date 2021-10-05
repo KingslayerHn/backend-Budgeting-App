@@ -5,5 +5,9 @@ export default interface TransferenceInterface extends Document {
   description: String;
   idSenderAccount: Schema.Types.ObjectId;
   idRecivedAccount: Schema.Types.ObjectId;
+  day: Number;
+  month: Number;
+  hour: Number;
+  minutes: Number;
   createAt: Date;
 }

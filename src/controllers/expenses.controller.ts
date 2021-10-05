@@ -5,6 +5,7 @@ import expensesValidation from '../validations/expensesValidation';
 import expensesModel from '../models/expenses.model';
 import accountModel from '../models/accounts.model';
 import { validate } from 'class-validator';
+import moment from 'moment';
 
 class Expenses {
   public async addExpense(req: requestWithUser, res: Response) {
@@ -42,12 +43,19 @@ class Expenses {
           message: 'Account does not exist!'
         });
       }
+      // obtain date
+      let date = moment();
+
       // create expense
       const expense = new expensesModel({
         user: userData._id,
         account: accountData._id,
         description,
-        amount
+        amount,
+        day: moment().date(),
+        month: moment().month(),
+        hour: moment().hour(),
+        minutes: moment().minutes()
       });
       await expense.save();
 

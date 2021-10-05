@@ -5,6 +5,7 @@ import expensesValidation from '../validations/expensesValidation';
 import incomeModel from '../models/income.model';
 import accountModel from '../models/accounts.model';
 import { validate } from 'class-validator';
+import moment from 'moment';
 
 class Income {
   public async addIncome(req: requestWithUser, res: Response) {
@@ -47,7 +48,11 @@ class Income {
         user: userData._id,
         account: accountData._id,
         description,
-        amount
+        amount,
+        day: moment().date(),
+        month: moment().month(),
+        hour: moment().hour(),
+        minutes: moment().minutes()
       });
       await income.save();
 

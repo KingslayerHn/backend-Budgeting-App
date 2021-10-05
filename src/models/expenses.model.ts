@@ -21,7 +21,22 @@ export const ExpenseSchema = new Schema({
     require: true,
     default: 0
   },
+  day: {
+    type: Number
+  },
 
+  month: {
+    type: Number
+  },
+  year: {
+    type: Number
+  },
+  hour: {
+    type: Number
+  },
+  minutes: {
+    type: Number
+  },
   createAt: {
     type: Date,
     default: Date.now
