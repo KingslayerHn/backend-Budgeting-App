@@ -52,7 +52,8 @@ class Income {
         day: moment().date(),
         month: moment().month(),
         hour: moment().hour(),
-        minutes: moment().minutes()
+        minutes: moment().minutes(),
+        year: moment().year()
       });
       await income.save();
 

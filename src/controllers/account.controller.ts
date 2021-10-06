@@ -1,6 +1,10 @@
 import requestWithUser from '../interfaces/request.with.user';
 import { Response } from 'express';
 import userModel from '../models/user.model';
+import expensesModel from '../models/expenses.model';
+import incomesModel from '../models/income.model';
+import transferencesModel from '../models/transferences.model';
+
 import accountValidation from '../validations/account.validation';
 import accountModel from '../models/accounts.model';
 import { validate } from 'class-validator';
@@ -124,6 +128,104 @@ class Account {
         { new: true }
       );
       return res.status(200).send(account);
+    } catch (error) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'Server error!',
+        error: error
+      });
+    }
+  }
+
+  // stadistics
+  public async getAllMonthStadistics(req: requestWithUser, res: Response) {
+    try {
+      // account id
+      const { id } = req.params;
+
+      // body
+      const { month, year } = req.body;
+
+      try {
+        // valid if the user exist
+        const user = await userModel.findOne({ _id: req.user._id });
+        if (!user) return res.status(400).json({ status: 'error', message: 'user not exist!' });
+
+        // valid if account exist
+        const account = await accountModel.findOne({ _id: id });
+        if (!account) return res.status(400).json({ status: 'error', message: 'account not exist!' });
+
+        // get total expences
+        const expenses = await expensesModel.aggregate([
+          {
+            $match: {
+              user: req.user._id,
+              account: account._id
+            }
+          },
+          {
+            $group: {
+              _id: '',
+              expenses: { $sum: '$amount' },
+              count: { $sum: 1 }
+            }
+          }
+        ]);
+
+        // get incomes
+        const incomes = await incomesModel.aggregate([
+          {
+            $match: {
+              user: req.user._id,
+              account: account._id
+            }
+          },
+          {
+            $group: {
+              _id: '',
+              incomes: { $sum: '$amount' },
+              count: { $sum: 1 }
+            }
+          }
+        ]);
+        // get tranferences
+        const transferencesIn = await transferencesModel.aggregate([
+          {
+            $match: {
+              user: req.user._id,
+              idRecivedAccount: account._id
+            }
+          },
+          {
+            $group: {
+              _id: '',
+              transferences: { $sum: '$senderAmount' },
+              count: { $sum: 1 }
+            }
+          }
+        ]);
+
+        const transferencesOut = await transferencesModel.aggregate([
+          {
+            $match: {
+              user: req.user._id,
+              idSenderAccount: account._id
+            }
+          },
+          {
+            $group: {
+              _id: '',
+              transferences: { $sum: '$senderAmount' },
+              count: { $sum: 1 }
+            }
+          }
+        ]);
+
+        return res.status(200).send({ expenses, incomes, transferencesIn, transferencesOut });
+      } catch (error) {
+        console.log(error);
+        return res.status(400).json({ status: 'error', message: 'Server error', error });
+      }
     } catch (error) {
       return res.status(400).json({
         status: 'error',

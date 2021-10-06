@@ -7,6 +7,7 @@ export default interface IncomeInterface extends Document {
   day: Number;
   month: Number;
   hour: Number;
+  year: Number;
   minutes: Number;
   createAt: Date;
 }

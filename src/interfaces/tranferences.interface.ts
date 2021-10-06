@@ -9,5 +9,6 @@ export default interface TransferenceInterface extends Document {
   month: Number;
   hour: Number;
   minutes: Number;
+  year: Number;
   createAt: Date;
 }

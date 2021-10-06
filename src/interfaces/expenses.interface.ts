@@ -7,6 +7,7 @@ export default interface ExpensesInterface extends Document {
   day: Number;
   month: Number;
   hour: Number;
+  year: Number;
   minutes: Number;
   createAt: Date;
 }
