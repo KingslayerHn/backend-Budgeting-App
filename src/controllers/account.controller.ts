@@ -160,7 +160,9 @@ class Account {
           {
             $match: {
               user: req.user._id,
-              account: account._id
+              account: account._id,
+              month: month,
+              year: year
             }
           },
           {
@@ -177,7 +179,9 @@ class Account {
           {
             $match: {
               user: req.user._id,
-              account: account._id
+              account: account._id,
+              month: month,
+              year: year
             }
           },
           {
@@ -188,12 +192,15 @@ class Account {
             }
           }
         ]);
-        // get tranferences
+
+        // get tranferences out
         const transferencesIn = await transferencesModel.aggregate([
           {
             $match: {
               user: req.user._id,
-              idRecivedAccount: account._id
+              idRecivedAccount: account._id,
+              month: month,
+              year: year
             }
           },
           {
@@ -209,7 +216,9 @@ class Account {
           {
             $match: {
               user: req.user._id,
-              idSenderAccount: account._id
+              idSenderAccount: account._id,
+              month: month,
+              year: year
             }
           },
           {
@@ -222,6 +231,139 @@ class Account {
         ]);
 
         return res.status(200).send({ expenses, incomes, transferencesIn, transferencesOut });
+      } catch (error) {
+        console.log(error);
+        return res.status(400).json({ status: 'error', message: 'Server error', error });
+      }
+    } catch (error) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'Server error!',
+        error: error
+      });
+    }
+  }
+
+  // stadistics by year
+  public async getAllYearStadistics(req: requestWithUser, res: Response) {
+    const months = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+
+    try {
+      // account id
+      const { id } = req.params;
+
+      // body
+      const { year } = req.body;
+
+      try {
+        // valid if the user exist
+        const user = await userModel.findOne({ _id: req.user._id });
+        if (!user) return res.status(400).json({ status: 'error', message: 'user not exist!' });
+
+        // valid if account exist
+        const account = await accountModel.findOne({ _id: id });
+        if (!account) return res.status(400).json({ status: 'error', message: 'account not exist!' });
+
+        const totalExpensesPerYear = [];
+        const totalIncomesPerYear = [];
+        const totalTransferencesInPerYear = [];
+        const totalTransferencesOutPerYear = [];
+
+        // Expenes per year
+        for (const month of months) {
+          const tempExpense = await expensesModel.aggregate([
+            {
+              $match: {
+                user: req.user._id,
+                account: account._id,
+                year: year,
+                month: month
+              }
+            },
+            {
+              $group: {
+                _id: '',
+                expenses: { $sum: '$amount' },
+                count: { $sum: 1 }
+              }
+            }
+          ]);
+
+          totalExpensesPerYear.push({ month: month, data: tempExpense });
+        }
+
+        // incomes per year
+        for (const month of months) {
+          const tempIncome = await incomesModel.aggregate([
+            {
+              $match: {
+                user: req.user._id,
+                account: account._id,
+                year: year,
+                month: month
+              }
+            },
+            {
+              $group: {
+                _id: '',
+                incomes: { $sum: '$amount' },
+                count: { $sum: 1 }
+              }
+            }
+          ]);
+
+          totalIncomesPerYear.push({ month: month, data: tempIncome });
+        }
+
+        // transferences in per year:
+
+        for (const month of months) {
+          const tempTransferenceIn = await transferencesModel.aggregate([
+            {
+              $match: {
+                user: req.user._id,
+                idRecivedAccount: account._id,
+                year: year,
+                month: month
+              }
+            },
+            {
+              $group: {
+                _id: '',
+                transferences: { $sum: '$senderAmount' },
+                count: { $sum: 1 }
+              }
+            }
+          ]);
+
+          totalTransferencesInPerYear.push({ month: month, data: tempTransferenceIn });
+        }
+
+        // transferences out per year:
+
+        for (const month of months) {
+          const tempTransferenceOut = await transferencesModel.aggregate([
+            {
+              $match: {
+                user: req.user._id,
+                idSenderAccount: account._id,
+                year: year,
+                month: month
+              }
+            },
+            {
+              $group: {
+                _id: '',
+                transferences: { $sum: '$senderAmount' },
+                count: { $sum: 1 }
+              }
+            }
+          ]);
+
+          totalTransferencesOutPerYear.push({ month: month, data: tempTransferenceOut });
+        }
+
+        return res.status(200).json({ expenses: totalExpensesPerYear, incomes: totalIncomesPerYear, transferencesIn: totalTransferencesInPerYear, transferencesOut: totalTransferencesOutPerYear });
       } catch (error) {
         console.log(error);
         return res.status(400).json({ status: 'error', message: 'Server error', error });

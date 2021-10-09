@@ -10,6 +10,7 @@ router
   .delete('/:id', auth, accountController.removeAccount)
   .put('/:id', auth, accountController.debit)
   .put('/update/:id', auth, accountController.updateAccount)
-  .get('/month/stadistics/:id', auth, accountController.getAllMonthStadistics);
+  .post('/month/stadistics/:id', auth, accountController.getAllMonthStadistics)
+  .post('/year/stadistics/:id', auth, accountController.getAllYearStadistics);
 
 export default router;
