@@ -18,6 +18,9 @@ export const UserSchema = new Schema({
     type: String,
     required: true
   },
+  keywords: {
+    type: String
+  },
 
   genre: {
     type: String,

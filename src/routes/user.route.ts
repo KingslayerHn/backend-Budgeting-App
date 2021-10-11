@@ -10,6 +10,7 @@ router
   .get('/by/:id', auth, userController.getUserById)
   .post('/signin', userController.Signin)
   .put('/update', auth, userController.updateUser)
-  .post('/update/password', auth, userController.updatePassword);
+  .post('/update/password', auth, userController.updatePassword)
+  .post('/search', auth, userController.getUsersSearchReferece);
 
 export default router;

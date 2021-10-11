@@ -41,7 +41,8 @@ class User {
         lastName,
         email,
         password,
-        genre
+        genre,
+        keywords: `${firstName} ${lastName}`
       });
 
       //encriptar contraseña
@@ -162,6 +163,7 @@ class User {
       if (profession) user.profession = profession;
       if (email) user.email = email;
       if (genre) user.genre = genre;
+      user.keywords = `${firstName} ${lastName}`;
 
       await user.save();
       return res.status(200).send(user);
@@ -200,6 +202,29 @@ class User {
       await user.save();
       return res.status(200).send(user);
     } catch (error) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'server error!'
+      });
+    }
+  }
+
+  public async getUsersSearchReferece(req: requestWithUser, res: Response) {
+    const { text } = req.body;
+
+    try {
+      // check if user exist
+      const user = await userModel.findOne({ _id: req.user._id });
+      if (!user) return res.status(400).json({ status: 'error', message: 'user not exist!' });
+
+      // search text
+      const usersFound = await userModel
+        .find({ keywords: { $regex: text, $options: 'i' } })
+        .select('-password')
+        .limit(10);
+      return res.status(200).send(usersFound);
+    } catch (error) {
+      console.log(error);
       return res.status(400).json({
         status: 'error',
         message: 'server error!'

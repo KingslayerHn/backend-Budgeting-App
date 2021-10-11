@@ -9,5 +9,6 @@ export default interface UserInterface extends Document {
   bio: string;
   password: string;
   avatar: string;
+  keywords: string;
   createAt: Date;
 }
