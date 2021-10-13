@@ -77,6 +77,44 @@ class Account {
       });
     }
   }
+  public async getAllUserAccountById(req: requestWithUser, res: Response) {
+    try {
+      const { id } = req.params;
+      // found if user that try to find account exist
+      if (!id) {
+        return res.status(400).json({
+          status: 'error',
+          message: 'the id is incorrect'
+        });
+      }
+      const user = await userModel.findById(req.user._id);
+      if (!user) {
+        return res.status(400).json({
+          status: 'error',
+          message: 'User not found or not exist!'
+        });
+      }
+      // found if user that show accounts to find account exist
+      const userRef = await userModel.findById(id);
+      if (!userRef) {
+        return res.status(400).json({
+          status: 'error',
+          message: 'User not found or not exist!'
+        });
+      }
+
+      // get all accounts of user
+      const accounts = await accountModel.find({ user: userRef._id });
+
+      return res.status(200).send(accounts);
+    } catch (error) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'Server error!',
+        error: error
+      });
+    }
+  }
   public async removeAccount(req: requestWithUser, res: Response) {
     try {
       const { id } = req.params;
