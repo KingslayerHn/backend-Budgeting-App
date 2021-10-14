@@ -191,7 +191,7 @@ class Friends {
         });
 
       //check frienship
-      const frienshipAccepted = await friendModel.findOne({
+      const friendshipAccepted = await friendModel.findOne({
         $or: [
           {
             $and: [{ reciver: user._id }, { sender: otherUser._id }, { status: 'accepted' }]
@@ -202,10 +202,10 @@ class Friends {
         ]
       });
 
-      if (frienshipAccepted) {
+      if (friendshipAccepted) {
         return res.status(200).json({
           status: 'success',
-          type: 'accepted'
+          data: friendshipAccepted
         });
       }
 
@@ -223,7 +223,7 @@ class Friends {
       if (friendShipSent) {
         return res.status(200).json({
           status: 'success',
-          type: 'sent'
+          data: friendShipSent
         });
       }
       return res.status(200).json({
