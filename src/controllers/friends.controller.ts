@@ -117,11 +117,17 @@ class Friends {
       // get all userFriends by id
       const friendShip = await friendModel
         .find({
-          user: userFriend._id,
-          status: 'accepted'
+          $or: [
+            {
+              $and: [{ reciver: user._id }, { sender: userFriend._id }, { status: 'accepted' }]
+            },
+            {
+              $and: [{ sender: user._id }, { reciver: userFriend._id }, { status: 'accepted' }]
+            }
+          ]
         })
-        .populate('friend')
-        .limit(3);
+        .populate('sender')
+        .populate('reciver');
 
       return res.status(200).send(friendShip);
     } catch (error) {
@@ -144,6 +150,12 @@ class Friends {
           status: 'error',
           message: 'user not exist!'
         });
+
+      // delete if status its decline
+      if (status === 'decline') {
+        const tempFriendItem = await friendModel.findOneAndRemove({ _id: friend });
+        return res.status(200).send(tempFriendItem);
+      }
 
       // check if friendship exist
       const friendshipExist = await friendModel
