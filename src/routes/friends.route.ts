@@ -9,6 +9,7 @@ router
   .get('/', auth, friendsController.getAllFriendsByUser)
   .get('/waiting', auth, friendsController.getAllWaitingRequestFriendByUser)
   .get('/by/id/:id', auth, friendsController.getAllUserFriendsById)
-  .put('/:friend/', auth, friendsController.changeStatusOfFriendship);
+  .put('/:friend/', auth, friendsController.changeStatusOfFriendship)
+  .post('/are/friends/:friend', auth, friendsController.checkFriendShip);
 
 export default router;

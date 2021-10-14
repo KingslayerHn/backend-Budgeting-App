@@ -170,6 +170,74 @@ class Friends {
       });
     }
   }
+  public async checkFriendShip(req: RequestWithUser, res: Response) {
+    const { friend } = req.params;
+
+    try {
+      // check if user logued  exist
+      const user = await userModel.findOne({ _id: req.user._id });
+      if (!user)
+        return res.status(400).json({
+          status: 'error',
+          message: 'user not exist!'
+        });
+
+      // check if orher user exist
+      const otherUser = await userModel.findOne({ _id: friend });
+      if (!otherUser)
+        return res.status(400).json({
+          status: 'error',
+          message: 'user not exist!'
+        });
+
+      //check frienship
+      const frienshipAccepted = await friendModel.findOne({
+        $or: [
+          {
+            $and: [{ reciver: user._id }, { sender: otherUser._id }, { status: 'accepted' }]
+          },
+          {
+            $and: [{ sender: user._id }, { reciver: otherUser._id }, { status: 'accepted' }]
+          }
+        ]
+      });
+
+      if (frienshipAccepted) {
+        return res.status(200).json({
+          status: 'success',
+          type: 'accepted'
+        });
+      }
+
+      const friendShipSent = await friendModel.findOne({
+        $or: [
+          {
+            $and: [{ reciver: user._id }, { sender: otherUser._id }, { status: 'sent' }]
+          },
+          {
+            $and: [{ sender: user._id }, { reciver: otherUser._id }, { status: 'sent' }]
+          }
+        ]
+      });
+
+      if (friendShipSent) {
+        return res.status(200).json({
+          status: 'success',
+          type: 'sent'
+        });
+      }
+      return res.status(200).json({
+        status: 'success',
+        type: 'none'
+      });
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json({
+        status: 'error',
+        message: 'server error!'
+      });
+    }
+  }
 }
 
 export default new Friends();
