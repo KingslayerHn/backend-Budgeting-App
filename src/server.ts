@@ -13,6 +13,7 @@ import expenseRoutes from './routes/expenses.route';
 import incomeRoutes from './routes/income.route';
 import transferencesRoutes from './routes/transferences.route';
 import avatarRoutes from './routes/profile.image.route';
+import friendsRoutes from './routes/friends.route';
 
 dotenv.config();
 
@@ -46,6 +47,7 @@ class Server {
     app.use('/api/expenses/', expenseRoutes);
     app.use('/api/incomes/', incomeRoutes);
     app.use('/api/transferences/', transferencesRoutes);
+    app.use('/api/friends/', friendsRoutes);
 
     // imagen profile routes
     app.use('/api/image/profile/', avatarRoutes);
