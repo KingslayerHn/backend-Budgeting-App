@@ -1,6 +1,7 @@
 import { Schema, Document } from 'mongoose';
 export default interface FriendsInterface extends Document {
-  user: Schema.Types.ObjectId;
-  friend: Schema.Types.ObjectId;
+  sender: Schema.Types.ObjectId;
+  reciver: Schema.Types.ObjectId;
   status: String;
+  createAt: Date;
 }

@@ -27,8 +27,8 @@ class Friends {
 
       // add friendship
       const friendShip = new friendModel({
-        user: user._id,
-        friend
+        sender: user._id,
+        reciver: friend
       });
       await friendShip.save();
       return res.status(200).send(friendShip);
@@ -53,12 +53,10 @@ class Friends {
 
       // get all friendship by user
       const friendship = await friendModel
-        .find({
-          user: req.user._id,
-          status: 'accepted'
-        })
+        .find({ $or: [{ sender: user._id }, { reciver: user._id }], status: 'accepted' })
         .limit(6)
-        .populate('friend');
+        .populate('reciver')
+        .populate('sender');
 
       return res.status(200).send(friendship);
     } catch (error) {
@@ -83,11 +81,11 @@ class Friends {
       // get all friendship by user
       const friendship = await friendModel
         .find({
-          user: req.user._id,
+          reciver: req.user._id,
           status: 'sent'
         })
         .limit(6)
-        .populate('friend');
+        .populate('sender');
 
       return res.status(200).send(friendship);
     } catch (error) {
