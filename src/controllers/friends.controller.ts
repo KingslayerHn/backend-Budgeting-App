@@ -56,7 +56,9 @@ class Friends {
         .find({
           user: req.user._id
         })
-        .limit(6);
+        .limit(6)
+        .populate('friend');
+
       return res.status(200).send(friendship);
     } catch (error) {
       console.log(error);
@@ -91,6 +93,7 @@ class Friends {
         .find({
           user: userFriend._id
         })
+        .populate('friend')
         .limit(3);
 
       return res.status(200).send(friendShip);
@@ -126,10 +129,12 @@ class Friends {
         });
 
       // check if friendship exist
-      const friendshipExist = await friendModel.findOne({
-        friend: friendExist._id,
-        user: user._id
-      });
+      const friendshipExist = await friendModel
+        .findOne({
+          friend: friendExist._id,
+          user: user._id
+        })
+        .populate('friend');
 
       if (!friendshipExist)
         return res.status(400).json({

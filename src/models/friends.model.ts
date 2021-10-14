@@ -8,7 +8,7 @@ export const FriendSchema = new Schema({
   },
   friend: {
     type: Schema.Types.ObjectId,
-    ref: 'accounts'
+    ref: 'users'
   },
   status: {
     type: String,
