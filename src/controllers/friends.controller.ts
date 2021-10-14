@@ -54,7 +54,6 @@ class Friends {
       // get all friendship by user
       const friendship = await friendModel
         .find({ $or: [{ sender: user._id }, { reciver: user._id }], status: 'accepted' })
-        .limit(6)
         .populate('reciver')
         .populate('sender');
 
@@ -84,7 +83,6 @@ class Friends {
           reciver: req.user._id,
           status: 'sent'
         })
-        .limit(6)
         .populate('sender');
 
       return res.status(200).send(friendship);
@@ -146,24 +144,13 @@ class Friends {
           status: 'error',
           message: 'user not exist!'
         });
-      // check if friendship exist
-      const friendExist = await userModel.findOne({
-        _id: friend
-      });
-
-      if (!friendExist)
-        return res.status(400).json({
-          status: 'error',
-          message: 'user that try to add friendship not exist!'
-        });
 
       // check if friendship exist
       const friendshipExist = await friendModel
         .findOne({
-          friend: friendExist._id,
-          user: user._id
+          _id: friend
         })
-        .populate('friend');
+        .populate('sender');
 
       if (!friendshipExist)
         return res.status(400).json({
