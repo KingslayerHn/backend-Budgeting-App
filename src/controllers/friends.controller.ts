@@ -54,7 +54,37 @@ class Friends {
       // get all friendship by user
       const friendship = await friendModel
         .find({
-          user: req.user._id
+          user: req.user._id,
+          status: 'accepted'
+        })
+        .limit(6)
+        .populate('friend');
+
+      return res.status(200).send(friendship);
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json({
+        status: 'error',
+        message: 'server error!'
+      });
+    }
+  }
+
+  public async getAllWaitingRequestFriendByUser(req: RequestWithUser, res: Response) {
+    try {
+      // check if user exist
+      const user = await userModel.findOne({ _id: req.user._id });
+      if (!user)
+        return res.status(400).json({
+          status: 'error',
+          message: 'user not exist!'
+        });
+
+      // get all friendship by user
+      const friendship = await friendModel
+        .find({
+          user: req.user._id,
+          status: 'sent'
         })
         .limit(6)
         .populate('friend');
@@ -91,7 +121,8 @@ class Friends {
       // get all userFriends by id
       const friendShip = await friendModel
         .find({
-          user: userFriend._id
+          user: userFriend._id,
+          status: 'accepted'
         })
         .populate('friend')
         .limit(3);
