@@ -5,6 +5,8 @@ import http from 'http';
 import cors from 'cors';
 import path from 'path';
 import keys from './config/keys';
+import { Socket, Server as SocketServer } from 'socket.io';
+import SocketIntance from './sockets/sockets';
 
 // routes
 import userRoutes from './routes/user.route';
@@ -20,12 +22,16 @@ dotenv.config();
 class Server {
   public app: express.Application;
   public server: http.Server;
+  public io: SocketServer;
 
   constructor() {
     this.app = express();
     this.server = new http.Server(this.app);
+    // socket server
+    this.io = new SocketServer(this.server);
     this.config();
     this.routes();
+    this.socketConfig();
   }
 
   public config(): void {
@@ -55,6 +61,10 @@ class Server {
     app.get('*', (req, res) => {
       res.sendFile(path.join(__dirname, 'public/index.html'));
     });
+  }
+
+  public socketConfig(): void {
+    new SocketIntance(this.io);
   }
 
   public start(): void {
